@@ -1,24 +1,26 @@
 class Solution {
 public:
     vector<string> generateParenthesis(int n) {
-        if (n-- == 1) return {"()"};
-
+        static const int catalan[] = {1, 1, 2, 5, 14, 42, 132, 429, 1430};
         vector<string> res;
-        auto dfs = [&](auto& self, int O, int C, string s) -> void {
-            if (O == 0 && C == 0) {
-                res.push_back(s + ")");
-                return;
-            }
-
-            if (O > 0)
-                self(self, O - 1, C, s + "(");
-
-            if (C >= O)
-                self(self, O, C - 1, s + ")");
-        };
-
-        dfs(dfs, n, n, "(");
-
+        res.reserve(catalan[n]);
+        string cur(2 * n, ' ');
+        dfs(res, cur, 0, 0, n);
         return res;
+    }
+
+private:
+    void dfs(vector<string>& res, string& cur, int pos, int open, int n) {
+        if (pos == 2 * n) {
+            res.push_back(cur);
+            return;}
+        if (open < n) {
+            cur[pos] = '(';
+            dfs(res, cur, pos + 1, open + 1, n);
+        }
+        if (pos - open < open) {   
+            cur[pos] = ')';
+            dfs(res, cur, pos + 1, open, n);
+        }
     }
 };
