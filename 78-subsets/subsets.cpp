@@ -1,19 +1,25 @@
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> res;
-        vector<int> cur;
-        backtrack(0, nums, cur, res);
-        return res;
-    }
+        vector<vector<int>>res;
+        vector<int>subset;
 
-private:
-    void backtrack(int start, vector<int>& nums, vector<int>& cur, vector<vector<int>>& res) {
-        res.push_back(cur);                       // every path is a valid subset
-        for (int i = start; i < nums.size(); i++) {
-            cur.push_back(nums[i]);               // choose
-            backtrack(i + 1, nums, cur, res);     // explore
-            cur.pop_back();                       // un-choose
+        createSubset(nums, 0, res, subset);
+            return res;
         }
-    }
+
+        void createSubset(vector<int>&nums, int index,  vector<vector<int>>&res, vector<int>&subset){
+            if (index == nums.size()){
+                res.push_back(subset);
+                return;
+            }
+
+            subset.push_back(nums[index]);
+            createSubset(nums, index+1, res, subset);
+
+            subset.pop_back();
+            createSubset(nums, index+1, res, subset);
+        }
+    
+    
 };
